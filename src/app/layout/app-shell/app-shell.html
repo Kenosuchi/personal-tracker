@@ -1,0 +1,27 @@
+<div class="flex min-h-dvh flex-col">
+  <header>
+    <mat-toolbar>
+      <span class="font-semibold">Personal Tracker</span>
+    </mat-toolbar>
+  </header>
+  <div class="flex flex-1 flex-col md:grid md:grid-cols-[14rem_minmax(0,1fr)]">
+    <nav
+      aria-label="Primary navigation"
+      class="flex gap-2 overflow-x-auto border-b p-2 md:flex-col md:border-r md:border-b-0"
+    >
+      @for (item of navigationItems; track item.path) {
+        <a
+          mat-button
+          [routerLink]="item.path"
+          routerLinkActive="active-link"
+          ariaCurrentWhenActive="page"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+    <main class="min-w-0 p-4 sm:p-6 lg:p-8">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
