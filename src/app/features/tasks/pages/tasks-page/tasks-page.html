@@ -1,2 +1,42 @@
 <h1>Tasks</h1>
-<p>Create, organize, and complete your personal tasks.</p>
+@if (taskStore.isLoading()) {
+  <div class="flex items-center gap-3 py-8" role="status" aria-live="polite">
+    <mat-spinner [diameter]="28" aria-hidden="true" />
+    <span>Loading tasks…</span>
+  </div>
+} @else if (taskStore.error()) {
+  <div role="alert">
+    <span>{{ taskStore.error() }}</span>
+    <button mat-button (click)="onRetry()">Retry</button>
+  </div>
+} @else if (taskStore.taskCount() === 0) {
+  <p>No tasks yet.</p>
+} @else {
+  <ul>
+    @for (task of taskStore.tasks(); track task.id) {
+      <li class="m-2">
+        <mat-card class="block p-4 shadow-sm">
+          <div class="flex items-start justify-between gap-4">
+            <h2 class="text-base font-semibold">{{ task.title }}</h2>
+            <span
+              class="rounded-full px-2 py-1 text-xs font-medium"
+              [class]="getPriorityClasses(task.priority)"
+            >
+              {{ task.priority }}
+            </span>
+          </div>
+
+          @if (task.description) {
+            <p class="mt-2 text-sm">{{ task.description }}</p>
+          }
+
+          <div class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-sm items-center">
+            <span class="text-base" [class]="getStatusClasses(task.status)">{{ task.status }}</span>
+            <span>{{ task.category ?? 'Uncategorized' }}</span>
+            <span>Due: {{ task.dueDate ?? 'No due date' }}</span>
+          </div>
+        </mat-card>
+      </li>
+    }
+  </ul>
+}
